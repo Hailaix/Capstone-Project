@@ -45,7 +45,7 @@ class User {
      * 
      * Throws BadRequestError on duplicate username
      */
-    static async register({ username, password, bio }) {
+    static async register({ username, password, email, bio }) {
         //first we check to make sure that username is unique
         const dupeCheck = await db.query(`
             SELECT username
@@ -61,21 +61,21 @@ class User {
         //insert the new user into the users table and return the new user's info
         const res = await db.query(`
             INSERT INTO users
-            (username, password, bio)
-            VALUES ($1,$2,$3)
-            RETURNING username, bio`,
-            [username, hashpass, bio]
+            (username, password, email, bio)
+            VALUES ($1,$2,$3,$4)
+            RETURNING username, email, bio`,
+            [username, hashpass, email, bio]
         )
         return res.rows[0];
     }
 
     /** get the list of all users
      * 
-     * Returns [{ username, bio }, ...]
+     * Returns [{ username, email, bio }, ...]
      */
     static async listAll() {
         const res = await db.query(`
-            SELECT username, bio
+            SELECT username, email, bio
             FROM users
             ORDER BY username`
         );
@@ -90,7 +90,7 @@ class User {
     static async get(username) {
         //first we retrieve the user from the db
         const res = await db.query(`
-        SELECT username, bio
+        SELECT username, email, bio
         FROM users
         WHERE username = $1`,
         [username]);

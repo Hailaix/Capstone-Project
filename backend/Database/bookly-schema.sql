@@ -2,12 +2,15 @@ CREATE TABLE books (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
   author TEXT,
+  description TEXT,
   link TEXT
 );
 
 CREATE TABLE users (
   username VARCHAR(25) PRIMARY KEY,
   password TEXT NOT NULL,
+  email TEXT NOT NULL
+    CHECK (position('@' IN email) > 1),
   bio TEXT
 );
 
