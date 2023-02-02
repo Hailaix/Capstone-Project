@@ -25,7 +25,7 @@ CREATE TABLE reviews (
 );
 
 CREATE TABLE reading_lists (
-  list_id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   username VARCHAR(25) REFERENCES users ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT
