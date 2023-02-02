@@ -1,15 +1,10 @@
 CREATE TABLE books (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
+  authors TEXT NOT NULL,
   description TEXT,
-  image TEXT,
+  cover TEXT,
   link TEXT
-);
-
-CREATE TABLE authors (
-  author_name TEXT,
-  book_id TEXT REFERENCES books ON DELETE CASCADE,
-  PRIMARY KEY (author_name, book_id)
 );
 
 CREATE TABLE users (
