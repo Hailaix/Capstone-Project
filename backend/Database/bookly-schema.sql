@@ -1,9 +1,15 @@
 CREATE TABLE books (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
-  author TEXT,
   description TEXT,
+  image TEXT,
   link TEXT
+);
+
+CREATE TABLE authors (
+  author_name TEXT,
+  book_id TEXT REFERENCES books ON DELETE CASCADE,
+  PRIMARY KEY (author_name, book_id)
 );
 
 CREATE TABLE users (
@@ -30,7 +36,7 @@ CREATE TABLE reading_lists (
   description TEXT
 );
 
-CREATE TABLE books_on_lists (
+CREATE TABLE books_lists (
     list_id INTEGER REFERENCES reading_lists ON DELETE CASCADE,
     book_id TEXT REFERENCES books ON DELETE CASCADE,
     PRIMARY KEY (list_id, book_id)

@@ -6,12 +6,14 @@ const morgan = require("morgan");
 const { NotFoundError } = require("./expressError");
 
 const app = express();
+const usersRouter = require('./routes/users');
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny"));
 
 /** App Routers for route subsets */
+app.use('/users', usersRouter)
 
 
 /** Handle 404 errors */

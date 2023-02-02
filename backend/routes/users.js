@@ -71,6 +71,7 @@ router.post('/login', async function (req, res, next) {
 
 /** Get /users : => { users: [ { user }, ...]} 
  *  Returns a list of every user
+ *  ***********************************************may not have a use, flagged for removal
 */
 router.get('/', async function (req, res, next) {
     try {
