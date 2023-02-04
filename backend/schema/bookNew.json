@@ -1,0 +1,31 @@
+{
+    "$id": "bookNew.json",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "authors": {
+            "type": "array"
+        },
+        "cover": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "link": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "id",
+        "title",
+        "authors",
+        "link"
+    ]
+}

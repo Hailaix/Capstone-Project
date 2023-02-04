@@ -16,12 +16,12 @@ CREATE TABLE users (
 );
 
 CREATE TABLE reviews (
-  book_id TEXT REFERENCES books ON DELETE CASCADE,
+  list_id TEXT REFERENCES reading_lists ON DELETE CASCADE,
   username VARCHAR(25) REFERENCES users ON DELETE CASCADE,
   rating INTEGER NOT NULL,
   title TEXT,
   body TEXT,
-  PRIMARY KEY (book_id, username)
+  PRIMARY KEY (list_id, username)
 );
 
 CREATE TABLE reading_lists (

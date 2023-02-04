@@ -1,0 +1,20 @@
+{
+    "$id": "listNew.json",
+    "type": "object",
+    "properties": {
+        "username": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "username",
+        "title"
+    ]
+}
