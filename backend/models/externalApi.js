@@ -30,16 +30,43 @@ async function addBookFromAPI(id) {
     return res.rows[0];
 };
 
+/** Helper function that constructs the query parameters of the request based on the search terms */
+const constructParams = (q, intitle, inauthor, isbn, offset) => {
+    const params = {
+        projection: "lite",
+        startIndex: offset
+    }
+    let qString = q;
+    if (intitle) qString += `+intitle:${intitle}`;
+    if (inauthor) qString += `+inauthor:${inauthor}`;
+    if (isbn) qString += `+isbn:${isbn}`;
+    params.q = qString;
+    return params;
+}
+
 /** Search the API for books matching the provided search terms
  *  Returns a list of books that match
  */
-async function search( offset = 0) {
-    /** Helper function that constructs the query parameters of the request based on the search terms */
-    const constructParams = () => {
-
-    }
+async function searchAPI(q, offset = 0, intitle, inauthor, isbn) {
+    //format the query parameters how the API wants them, then send the request
+    const params = constructParams(q, intitle, inauthor, isbn, offset);
+    const { data } = await axios.get(BASE_URL, { params });
+    //extract an array of just the book info we want from data
+    const books = data.items.map(item => {
+        const book = {
+            id : item.id,
+            title : item.volumeInfo.title,
+            authors : item.volumeInfo.authors,
+            cover : item.volumeInfo.imageLinks.thumbnail,
+            description : item.volumeInfo.description,
+            link : item.volumeInfo.canonicalVolumeLink
+        }
+        return book;
+    });
+    return books;
 }
 
 module.exports = {
-    addBookFromAPI
+    addBookFromAPI,
+    searchAPI
 }

@@ -125,6 +125,9 @@ class List {
             [id]);
         if (!res.rows[0]) throw new NotFoundError(`no such list`);
     }
+
+    /**TODO */
+    /** Edit a list's title and description */
 }
 
 module.exports = List;

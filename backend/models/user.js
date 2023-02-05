@@ -122,6 +122,8 @@ class User {
         [username]);
         if(!res.rows[0]) throw new NotFoundError(`no such user: ${username}`);
     }
+
+    /**TODO edit a user profile */
 }
 
 module.exports = User;

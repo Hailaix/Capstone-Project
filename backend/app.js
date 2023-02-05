@@ -7,13 +7,15 @@ const { NotFoundError } = require("./expressError");
 
 const app = express();
 const usersRouter = require('./routes/users');
+const searchRouter = require('./routes/search');
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny"));
 
 /** App Routers for route subsets */
-app.use('/users', usersRouter)
+app.use('/users', usersRouter);
+app.use('/search', searchRouter);
 
 
 /** Handle 404 errors */
