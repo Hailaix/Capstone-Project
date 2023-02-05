@@ -1,6 +1,8 @@
 const db = require('../db');
 const { NotFoundError, BadRequestError } = require('../expressError');
 
+const { addBookFromAPI } = require('./externalApi');
+
 /** Functions for lists */
 class List {
 
@@ -79,8 +81,9 @@ class List {
         WHERE id = $1`,
             [book_id]);
         if (!bookRes.rows[0]) {
-            //TEMP will error if book is not in db, eventually, this will add from API
-            throw new NotFoundError("no such book");
+            //add the book from the api to the db
+            //note: any axios errors from the request are uncaught, so they will go straight through
+            const book = await addBookFromAPI(id);
         }
 
         //finally, check to make sure the book is not already on the list
