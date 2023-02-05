@@ -128,6 +128,16 @@ class List {
 
     /**TODO */
     /** Edit a list's title and description */
+    static async updateList(list_id, title, description) {
+        const res = await db.query(`
+        UPDATE lists
+        SET title = $2, description = $3
+        WHERE id = $1
+        RETURNING list_id, title, description`,
+            [list_id, title, description]);
+        if (!res.rows[0]) throw new NotFoundError(`no such list`);
+        return res.rows[0];
+    }
 }
 
 module.exports = List;

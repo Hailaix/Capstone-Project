@@ -8,14 +8,21 @@ const { NotFoundError } = require("./expressError");
 const app = express();
 const usersRouter = require('./routes/users');
 const searchRouter = require('./routes/search');
+const listsRouter = require('./routes/lists');
+
+const { authenticateJWT } = require('./middleware');
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny"));
 
+/** extracts jwt token for every incoming request */
+app.use(authenticateJWT);
+
 /** App Routers for route subsets */
 app.use('/users', usersRouter);
 app.use('/search', searchRouter);
+app.use('/lists', listsRouter);
 
 
 /** Handle 404 errors */

@@ -4,6 +4,9 @@ const express = require('express');
 const router = new express.Router();
 const User = require('../models/user');
 
+//authentication middleware
+const { ensureLoggedIn, ensureCorrectUser } = require('../middleware');
+
 //for JWT tokens
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../config');
@@ -73,7 +76,7 @@ router.post('/login', async function (req, res, next) {
  *  Returns a list of every user
  *  ***********************************************may not have a use, flagged for removal
 */
-router.get('/', async function (req, res, next) {
+router.get('/', ensureLoggedIn, async function (req, res, next) {
     try {
         const users = await User.listAll();
         return res.json({ users });
@@ -86,7 +89,7 @@ router.get('/', async function (req, res, next) {
  *  Returns { username, email, bio, lists}
  *  Where lists is [ { list name, list_id }, ... ]
 */
-router.get('/:username', async function (req, res, next) {
+router.get('/:username', ensureLoggedIn, async function (req, res, next) {
     try {
         const user = await User.get(req.params.username);
         return res.json({ user });
@@ -99,7 +102,7 @@ router.get('/:username', async function (req, res, next) {
  *  Removes user from db
  *  Auth required: login as :username
  */
-router.delete('/:username', async function (req, res, next) {
+router.delete('/:username', ensureCorrectUser, async function (req, res, next) {
     try {
         await User.remove(req.params.username);
         return res.json({ deleted: req.params.username });
