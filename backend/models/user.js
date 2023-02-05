@@ -53,7 +53,7 @@ class User {
             WHERE username = $1`,
             [username]
         );
-        if(dupeCheck.rows[0]) {
+        if (dupeCheck.rows[0]) {
             throw new BadRequestError(`Duplicate username: ${username}`);
         }
         //hash the password to be put into the db
@@ -93,18 +93,18 @@ class User {
         SELECT username, email, bio
         FROM users
         WHERE username = $1`,
-        [username]);
+            [username]);
         const user = res.rows[0];
 
         //if the user does not exist, throw an error
-        if(!user) throw new NotFoundError(`no such user: ${username}`)
+        if (!user) throw new NotFoundError(`no such user: ${username}`)
 
         //otherwise we grab all of the lists associated with the user and add them on
         const lists = await db.query(`
-        SELECT list_id, title
+        SELECT id, title
         FROM reading_lists
         WHERE username = $1`,
-        [username]);
+            [username]);
         user.lists = lists.rows;
 
         return user;
@@ -119,11 +119,45 @@ class User {
         DELETE FROM users
         WHERE username = $1
         RETURNING username`,
-        [username]);
-        if(!res.rows[0]) throw new NotFoundError(`no such user: ${username}`);
+            [username]);
+        if (!res.rows[0]) throw new NotFoundError(`no such user: ${username}`);
     }
 
     /**TODO edit a user profile */
+    /** changes a user's information in the db
+     *  data can consist of { password, email, bio } but not manditory
+     *  throws NotFoundError if user does not exist, BadRequestError if data is empty,
+     *  otherwise returns the changed user
+     */
+    static async update(username, data) {
+        //if the password is being updated, hash it
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+        }
+
+        //first, get the column names of the fields to be updated in the db
+        const keys = Object.keys(data);
+        //if no data is being provided, throw a BadRequestError
+        if (keys.length === 0) throw new BadRequestError("no data to update");
+
+        /** This takes the column name from the key and creates the SET string of every updating column
+         *  ex. if data is { password, bio }, cols will be the string 'password = $1, bio = $2'
+        */
+        const cols = keys.map((col, idx) => (`${col} = $${idx + 1}`)).join(", ");
+        //values is the new values being sent to the db
+        const values = Object.values(data);
+
+        console.log(cols, values);
+        const res = await db.query(`
+        UPDATE users
+        SET ${cols}
+        WHERE username = $${values.length + 1}
+        RETURNING username, email, bio`,
+        [...values, username]);
+        
+        if(!res.rows[0]) throw new NotFoundError(`no such user: ${username}`);
+        return res.rows[0];
+    }
 }
 
 module.exports = User;

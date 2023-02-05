@@ -14,6 +14,8 @@ const { SECRET_KEY } = require('../config');
 //for validation
 const jsonschema = require('jsonschema');
 const userRegisterSchema = require('../schema/userRegister.json');
+const userLoginSchema = require('../schema/userLogin.json');
+const userUpdateSchema = require('../schema/userUpdate.json');
 const { BadRequestError } = require('../expressError');
 
 /** Create a JWT for the provided user
@@ -56,7 +58,7 @@ router.post('/register', async function (req, res, next) {
 router.post('/login', async function (req, res, next) {
     try {
         //validate the login request for formatting
-        const validator = jsonschema.validate(req.body, userRegisterSchema);
+        const validator = jsonschema.validate(req.body, userLoginSchema);
         if (!validator.valid) {
             const errors = validator.errors.map(e => e.stack);
             throw new BadRequestError(errors);
@@ -72,18 +74,18 @@ router.post('/login', async function (req, res, next) {
     }
 });
 
-/** Get /users : => { users: [ { user }, ...]} 
- *  Returns a list of every user
- *  ***********************************************may not have a use, flagged for removal
-*/
-router.get('/', ensureLoggedIn, async function (req, res, next) {
-    try {
-        const users = await User.listAll();
-        return res.json({ users });
-    } catch (e) {
-        return next(e);
-    }
-});
+// /** Get /users : => { users: [ { user }, ...]} 
+//  *  Returns a list of every user
+//  *  ***********************************************may not have a use, flagged for removal
+// */
+// router.get('/', ensureLoggedIn, async function (req, res, next) {
+//     try {
+//         const users = await User.listAll();
+//         return res.json({ users });
+//     } catch (e) {
+//         return next(e);
+//     }
+// });
 
 /** Get /:username : => { user }
  *  Returns { username, email, bio, lists}
@@ -110,5 +112,24 @@ router.delete('/:username', ensureCorrectUser, async function (req, res, next) {
         return next(e);
     }
 });
+
+/** PATCH /:username
+ *  updates the user info in the db
+ *  must be logged in as correct user
+ *  returns { username, email, bio }
+ */
+router.patch('/:username', ensureCorrectUser, async function (req, res, next) {
+    try {
+        const validator = jsonschema.validate(req.body, userUpdateSchema);
+        if (!validator.valid) {
+            const errs = validator.errors.map(e => e.stack);
+            throw new BadRequestError(errs);
+        }
+        const user = await User.update(req.params.username, req.body);
+        return res.json({ user });
+    } catch (e) {
+        return next(e);
+    }
+})
 
 module.exports = router;

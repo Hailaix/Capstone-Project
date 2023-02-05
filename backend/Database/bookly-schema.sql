@@ -15,20 +15,20 @@ CREATE TABLE users (
   bio TEXT
 );
 
-CREATE TABLE reviews (
-  list_id TEXT REFERENCES reading_lists ON DELETE CASCADE,
-  username VARCHAR(25) REFERENCES users ON DELETE CASCADE,
-  rating INTEGER NOT NULL,
-  title TEXT,
-  body TEXT,
-  PRIMARY KEY (list_id, username)
-);
-
 CREATE TABLE reading_lists (
   id SERIAL PRIMARY KEY,
   username VARCHAR(25) REFERENCES users ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT
+);
+
+CREATE TABLE reviews (
+  list_id INTEGER REFERENCES reading_lists ON DELETE CASCADE,
+  username VARCHAR(25) REFERENCES users ON DELETE CASCADE,
+  rating INTEGER NOT NULL,
+  title TEXT,
+  body TEXT,
+  PRIMARY KEY (list_id, username)
 );
 
 CREATE TABLE books_lists (

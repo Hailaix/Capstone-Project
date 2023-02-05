@@ -1,7 +1,6 @@
 /** Routes for reading lists */
 
 const express = require('express');
-const db = require('../../../express-jobly/db');
 const router = express.Router();
 const List = require('../models/list');
 
@@ -71,7 +70,7 @@ router.put('/:id', ensureLoggedIn, async function (req, res, next) {
         const complist = await List.get(req.params.id);
         if (complist.username !== res.locals.user.username) throw new UnauthorizedError();
         //then validate the body and update the list
-        const validator = jsonschema.validate(req.body, listNewSchema);
+        const validator = jsonschema.validate(req.body, listUpdateSchema);
         if (!validator.valid) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);

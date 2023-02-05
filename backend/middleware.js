@@ -37,6 +37,7 @@ function ensureCorrectUser(req, res, next) {
         if (!(user && user.username === req.params.username)) {
             throw new UnauthorizedError();
         }
+        return next();
     } catch (e) {
         return next(e);
     }
