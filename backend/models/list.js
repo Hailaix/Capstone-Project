@@ -36,7 +36,7 @@ class List {
         const res = await db.query(`
         SELECT id, username, title, description
         FROM reading_lists
-        WHERE list_id = $1`,
+        WHERE id = $1`,
             [list_id]);
 
         if (!res.rows[0]) throw new NotFoundError(`No list found with id ${list_id}`);
@@ -44,7 +44,7 @@ class List {
         const list = res.rows[0];
         //if the list does exist, grab some basic info about the books on the list
         const booksRes = await db.query(`
-        SELECT b.id, title
+        SELECT b.id, title, authors, cover, description, link
         FROM books b
         JOIN books_lists l
         ON b.id = l.book_id
@@ -83,7 +83,8 @@ class List {
         if (!bookRes.rows[0]) {
             //add the book from the api to the db
             //note: any axios errors from the request are uncaught, so they will go straight through
-            const book = await addBookFromAPI(id);
+            console.log("attempting to retrieve from API");
+            const book = await addBookFromAPI(book_id);
         }
 
         //finally, check to make sure the book is not already on the list
@@ -130,10 +131,10 @@ class List {
     /** Edit a list's title and description */
     static async updateList(list_id, title, description) {
         const res = await db.query(`
-        UPDATE lists
+        UPDATE reading_lists
         SET title = $2, description = $3
         WHERE id = $1
-        RETURNING list_id, title, description`,
+        RETURNING id, title, description`,
             [list_id, title, description]);
         if (!res.rows[0]) throw new NotFoundError(`no such list`);
         return res.rows[0];

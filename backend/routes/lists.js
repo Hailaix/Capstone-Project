@@ -39,6 +39,7 @@ router.post('/', ensureLoggedIn, async function (req, res, next) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
+        req.body.username = res.locals.user.username;
         const list = await List.addList(req.body);
         return res.status(201).json({ list });
     } catch (e) {
@@ -86,7 +87,7 @@ router.put('/:id', ensureLoggedIn, async function (req, res, next) {
 /** POST /:id/:book_id adds the specified book to the specified list
  *  Requires the logged in user to be the owner of the list
  */
-router.post(':id/:book_id', ensureLoggedIn, async function (req, res, next) {
+router.post('/:id/:book_id', ensureLoggedIn, async function (req, res, next) {
     try {
         //grab the list to make sure the logged in user is the owner
         const complist = await List.get(req.params.id);
@@ -102,7 +103,7 @@ router.post(':id/:book_id', ensureLoggedIn, async function (req, res, next) {
 /** DELETE /:id/:book_id removes the specified book from the specified list 
  *  Requires the logged in user to be the owner of the list
 */
-router.delete(':id/:book_id', ensureLoggedIn, async function (req, res, next) {
+router.delete('/:id/:book_id', ensureLoggedIn, async function (req, res, next) {
     try {
         //grab the list to make sure the logged in user is the owner
         const complist = await List.get(req.params.id);

@@ -3,6 +3,8 @@
 const axios = require('axios');
 const BASE_URL = 'https://www.googleapis.com/books/v1/volumes';
 
+const db = require('../db');
+
 /** Adds a book not currently in the db from the API
      *  Assumes that id is not already in db
      *  Returns { id, title, authors, cover, description, link }
@@ -24,9 +26,6 @@ async function addBookFromAPI(id) {
     RETURNING id, title, authors, cover, description, link`,
         [id, title, authors.join(','), cover, description, link]);
 
-    const book = res.rows[0];
-    //split authors back into an array
-    book.authors = book.authors.split(',');
     return res.rows[0];
 };
 
