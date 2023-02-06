@@ -9,6 +9,7 @@ const app = express();
 const usersRouter = require('./routes/users');
 const searchRouter = require('./routes/search');
 const listsRouter = require('./routes/lists');
+const reviewsRouter = require('./routes/reviews');
 
 const { authenticateJWT } = require('./middleware');
 
@@ -23,6 +24,7 @@ app.use(authenticateJWT);
 app.use('/users', usersRouter);
 app.use('/search', searchRouter);
 app.use('/lists', listsRouter);
+app.use('/lists/:list_id/reviews', reviewsRouter);
 
 
 /** Handle 404 errors */

@@ -1,0 +1,19 @@
+{
+    "$id": "reviewNew.json",
+    "type": "object",
+    "properties": {
+        "rating": {
+            "type": "integer"
+        },
+        "title": {
+            "type": "string"
+        },
+        "body": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "rating"
+    ]
+}

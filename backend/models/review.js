@@ -93,3 +93,5 @@ class Review {
         return res.rows[0];
     }
 }
+
+module.exports = Review;
