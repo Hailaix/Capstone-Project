@@ -123,7 +123,6 @@ class User {
         if (!res.rows[0]) throw new NotFoundError(`no such user: ${username}`);
     }
 
-    /**TODO edit a user profile */
     /** changes a user's information in the db
      *  data can consist of { password, email, bio } but not manditory
      *  throws NotFoundError if user does not exist, BadRequestError if data is empty,
@@ -147,7 +146,6 @@ class User {
         //values is the new values being sent to the db
         const values = Object.values(data);
 
-        console.log(cols, values);
         const res = await db.query(`
         UPDATE users
         SET ${cols}
