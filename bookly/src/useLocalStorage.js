@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 
-const useLocalStorage = (key, defaultVal = null) => {
-    //set state either from local storage or defaultVal
+/** Allows storage of strings in localStorage
+ *  Notably only works with strings, not arrays or objects
+ */
+const useLocalStorage = (key) => {
+    //set state from local storage
     const [state, setState] = useState(() => {
-        //if for some reason JSON.parse errors, just use defaultVal
-        try {
-            return JSON.parse(localStorage.getItem(key)) || defaultVal;
-        } catch (e) {
-            return defaultVal;
-        }
+        //retrieve state from localStorage
+        return localStorage.getItem(key);
     });
     //any time state is changed, set it in localStorage as well
     useEffect(() => {

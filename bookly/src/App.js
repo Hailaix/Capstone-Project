@@ -14,6 +14,8 @@ import ReadingLists from './components/ReadingLists';
 import Profile from './components/Profile';
 
 import './App.css';
+import Home from './components/Home';
+import SearchPage from './components/SearchPage';
 
 
 
@@ -64,13 +66,13 @@ function App() {
     <div className="App">
       <NavBar user={user} logout={logout} />
       <Routes>
-        <Route path='/' element={<div>home</div>} />
+        <Route path='/' element={<Home />} />
         <Route path='login' element={<LoginForm submit={login} />} />
         <Route path='signup' element={<SignUpForm submit={signup} />} />
-        <Route path='users/:username' element={user ? <Profile /> : <Navigate to='/login' />} />
+        <Route path='users/:username' element={user ? <Profile user={user} /> : <Navigate to='/login' />} />
         <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/login' />} />
-        <Route path='lists/:list_id' element={user ? <List /> : <Navigate to='/login' />} />
-        <Route path='search' element={user ? <div>search form</div> : <Navigate to='login' />} />
+        <Route path='lists/:list_id' element={user ? <List user={user} /> : <Navigate to='/login' />} />
+        <Route path='search' element={user ? <SearchPage /> : <Navigate to='login' />} />
       </Routes>
     </div>
   );
