@@ -102,6 +102,14 @@ class BooklyAPI {
         await this.request(`lists/${list_id}/${book_id}`, {}, 'delete');
     }
     /**Search Route */
+    /**GET searches the google books API for matches to search terms in data
+     *  data : { q, intitle, inauthor, isbn, offset}
+     * returns a list of books
+     */
+    static async search(data) {
+        const res = this.request(`search`, data);
+        return res.books;
+    }
 }
 
 export default BooklyAPI;

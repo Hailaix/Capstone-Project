@@ -5,10 +5,17 @@ import jwt_decode from 'jwt-decode';
 import BooklyAPI from './api';
 import useLocalStorage from './useLocalStorage';
 
+import NavBar from './components/NavBar';
+import SignUpForm from './components/SignUpForm';
 import LoginForm from './components/LoginForm';
 
+import List from './components/List';
+import ReadingLists from './components/ReadingLists';
+import Profile from './components/Profile';
+
 import './App.css';
-import NavBar from './components/NavBar';
+
+
 
 function App() {
 
@@ -28,12 +35,7 @@ function App() {
       if (token) {
         //if there is a token, extract the username from it and set it in state
         const { username } = jwt_decode(token);
-        //if somehow the token in storage does not have a username, set token to null as it is not our token
-        if (!username) {
-          setToken(null);
-        } else {
-          setUser(username);
-        }
+        setUser(username);
       }
     }
     getUser();
@@ -64,6 +66,11 @@ function App() {
       <Routes>
         <Route path='/' element={<div>home</div>} />
         <Route path='login' element={<LoginForm submit={login} />} />
+        <Route path='signup' element={<SignUpForm submit={signup} />} />
+        <Route path='users/:username' element={user ? <Profile /> : <Navigate to='/login' />} />
+        <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/login' />} />
+        <Route path='lists/:list_id' element={user ? <List /> : <Navigate to='/login' />} />
+        <Route path='search' element={user ? <div>search form</div> : <Navigate to='login' />} />
       </Routes>
     </div>
   );

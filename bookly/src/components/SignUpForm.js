@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = ({ submit }) => {
-    //initial state for form reset
+const SignUpForm = ({ submit }) => {
     const INIT_STATE = {
         username: '',
-        password: ''
+        password: '',
+        email: ''
     };
     const [formData, setFormData] = useState(INIT_STATE);
     const [errors, setErrors] = useState([]);
@@ -51,14 +51,21 @@ const LoginForm = ({ submit }) => {
                     autoComplete='current-password'
                     onChange={handleChange}
                 />
+                <label>Email</label>
+                <input
+                    name="email"
+                    type='email'
+                    value={formData.email}
+                    autoComplete='email'
+                    onChange={handleChange}
+                />
                 <input type='submit' />
                 {errors.map((e, i) => (
                     <small key={i}>{e}</small>
                 ))}
             </form>
-            <button onClick={() => navigate('/signup')}>New user? Sign up</button>
         </div>
     )
 }
 
-export default LoginForm;
+export default SignUpForm;
