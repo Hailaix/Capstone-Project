@@ -23,9 +23,9 @@ class Review {
 
         //first, check if the reading list exists
         const listcheck = await db.query(`
-        SELECT list_id
+        SELECT id, title
         FROM reading_lists
-        WHERE list_id = $1`,
+        WHERE id = $1`,
             [list_id]);
         if (!listcheck.rows[0]) throw new NotFoundError('no such list');
 

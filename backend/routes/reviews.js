@@ -16,7 +16,7 @@ const { BadRequestError, UnauthorizedError } = require('../expressError');
 /** GET retrieve the list of reviews for the reading list
  *  Returns { reviews : [ {username, rating, title, body }, ...]}
 */
-router.get('/', ensureLoggedIn, async function (req, res, next) {
+router.get('/:list_id', ensureLoggedIn, async function (req, res, next) {
     try {
         const reviews = await Review.getAll(req.params.list_id);
         return res.json({ reviews });
@@ -29,7 +29,7 @@ router.get('/', ensureLoggedIn, async function (req, res, next) {
  *  Returns { review }
  *  where review is { list_id, username, rating, title, body }
  */
-router.post('/', ensureLoggedIn, async function (req, res, next) {
+router.post('/:list_id', ensureLoggedIn, async function (req, res, next) {
     try {
         //validate the request body
         const validator = jsonschema.validate(req.body, reviewNewSchema);
@@ -50,7 +50,7 @@ router.post('/', ensureLoggedIn, async function (req, res, next) {
  *  Throws BadRequest on incorrectly formatted body, NotFound if the user has not reviewed the list
  *  and Unauthorized if attempting to edit a review that was not authored by the logged in user
  */
-router.patch('/:username', ensureLoggedIn, async function (req, res, next) {
+router.patch('/:list_id/:username', ensureLoggedIn, async function (req, res, next) {
     try {
         //if the logged in user is not the author of the review, throw unauth
         if (req.params.username !== res.locals.user.username) throw new UnauthorizedError();
@@ -73,7 +73,7 @@ router.patch('/:username', ensureLoggedIn, async function (req, res, next) {
  *  Throws Unauthorized on attempting to delete a review not by the logged in user
  *  NotFound on failure to find review
  */
-router.delete('/:username', ensureLoggedIn, async function (req, res, next) {
+router.delete('/:list_id/:username', ensureLoggedIn, async function (req, res, next) {
     try {
         //if the logged in user is not the author of the review, throw unauth
         if (req.params.username !== res.locals.user.username) throw new UnauthorizedError();

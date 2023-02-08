@@ -94,11 +94,9 @@ const SignUpForm = ({ submit }) => {
                                 <small key={i} className="text-danger">{e}</small>
                             ))}
                         </div>
-
                     </form>
                 </div>
             </div>
-
         </div>
     )
 }

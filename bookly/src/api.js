@@ -100,14 +100,15 @@ class BooklyAPI {
 
     /**POST add a book to a list */
     static async addBook(list_id, book_id) {
-        await this.request(`lists/${list_id}/${book_id}`, {}, 'post');
+        await this.request(`lists/${list_id}/books/${book_id}`, {}, 'post');
     }
 
     /**DELETE remove a book from a list */
     static async removeBook(list_id, book_id) {
-        await this.request(`lists/${list_id}/${book_id}`, {}, 'delete');
+        await this.request(`lists/${list_id}/books/${book_id}`, {}, 'delete');
     }
     /**Search Route */
+
     /**GET searches the google books API for matches to search terms in data
      *  data : { q, intitle, inauthor, isbn, offset}
      * returns a list of books
@@ -115,6 +116,35 @@ class BooklyAPI {
     static async search(data) {
         const res = await this.request(`search`, data);
         return res.books;
+    }
+
+    /**Review Routes */
+    
+    /**POST creates a new review of a list by user 
+     * data: {rating, title, body}, title and body optional
+     * returns the review
+    */
+    static async createReview(list_id, data) {
+        //ensure that rating is an integer
+        data.rating = +data.rating;
+        const res = await this.request(`reviews/${list_id}`, data, 'post');
+        return res.review;
+    }
+
+    /**PATCH edits a review with new data
+     * data: {rating, title, body}
+     * returns the edited review
+     */
+    static async editReview(list_id, username, data) {
+        //ensure that rating is an integer
+        if(data.rating) data.rating = +data.rating
+        const res = await this.request(`reviews/${list_id}/${username}`, data, 'patch');
+        return res.review;
+    }
+
+    /**DELETE removes the user's review from the list */
+    static async removeReview(list_id, username) {
+        await this.request(`reviews/${list_id}/${username}`, {}, 'delete');
     }
 }
 

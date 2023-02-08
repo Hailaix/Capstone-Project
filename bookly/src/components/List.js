@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import BooklyAPI from "../api";
 import Book from "./Book";
 import ListEditForm from "./ListEditForm";
+import ReviewForm from "./ReviewForm";
 
 const List = ({ user }) => {
     const { list_id } = useParams();
@@ -13,6 +14,8 @@ const List = ({ user }) => {
     const [editing, setEditing] = useState(false);
     //provides a confirmation before deletion
     const [delConfirm, setDelConfirm] = useState(false);
+    //toggle review form
+    const [reviewing, setReviewing] = useState(false);
 
     //retrieve the reading list from the API
     useEffect(() => {
@@ -42,10 +45,16 @@ const List = ({ user }) => {
     const toggleDel = () => {
         setDelConfirm(!delConfirm);
     }
+    //deletes the list and returns to the profile page
     const deleteList = async () => {
         await BooklyAPI.removeList(list_id);
         //after deletion return to our profile page
         navigate(`/users/${list.username}`);
+    }
+
+    //toggle on the review edit/create form
+    const toggleReview = () => {
+        setReviewing(!reviewing);
     }
 
     //removes a book from the list in the db, then removes it from state
@@ -56,6 +65,33 @@ const List = ({ user }) => {
 
     //loading screen if list hasn't been retrieved yet
     if (!list) return (<h1>Loading...</h1>);
+
+    //if the logged in user has left a review, find it
+    const userReview = list.reviews.filter(review => (review.username === user))[0];
+
+    //depending on if we are editing or creating, submit the data to the db
+    const submitReview = async formData => {
+        if (!userReview) {
+            //if a review is being created, create it
+            const review = await BooklyAPI.createReview(list_id, formData);
+            //add the new review to the list
+            setList({ ...list, reviews: [...list.reviews, review] });
+            toggleReview();
+        } else {
+            //if a review is being edited, edit it in the db
+            const review = await BooklyAPI.editReview(list_id, user, formData);
+            //replace the old review in the list with the new one
+            setList({
+                ...list, reviews: list.reviews.map(r => (
+                    r.username === review.username
+                        ? review
+                        : r
+                ))
+            });
+            toggleReview();
+        }
+    }
+
     return (
         <div className="container-fluid align-items-center" id={list.id}>
             <div className="row">
@@ -93,7 +129,17 @@ const List = ({ user }) => {
                     <div className="row">
                         <h3>Reviews</h3>
                         {user !== list.username &&
-                            <button className="btn btn-secondary">Leave A Review</button>
+                            <div className="col">
+                                {reviewing
+                                    ? <ReviewForm review={userReview} save={submitReview} cancel={toggleReview} />
+                                    : <button className="btn btn-link" onClick={toggleReview}>
+                                        {userReview
+                                            ? "Edit your Review"
+                                            : "Leave a Review"
+                                        }
+                                    </button>
+                                }
+                            </div>
                         }
                         {list.reviews.length === 0
                             ? <p><i>No Reviews yet...</i></p>

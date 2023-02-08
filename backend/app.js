@@ -24,7 +24,7 @@ app.use(authenticateJWT);
 app.use('/users', usersRouter);
 app.use('/search', searchRouter);
 app.use('/lists', listsRouter);
-app.use('/lists/:list_id/reviews', reviewsRouter);
+app.use('/reviews', reviewsRouter);
 
 
 /** Handle 404 errors */
