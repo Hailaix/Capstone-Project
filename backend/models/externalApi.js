@@ -4,6 +4,7 @@ const axios = require('axios');
 const BASE_URL = 'https://www.googleapis.com/books/v1/volumes';
 
 const db = require('../db');
+const { BadRequestError } = require('../expressError');
 
 /** Adds a book not currently in the db from the API
      *  Assumes that id is not already in db
@@ -34,7 +35,8 @@ const constructParams = (q, intitle, inauthor, isbn, offset) => {
     const params = {
         projection: "lite",
         startIndex: offset,
-        fields: 'items(id,volumeInfo/title,volumeInfo/authors,volumeInfo/description,volumeInfo/imageLinks/thumbnail,volumeInfo/canonicalVolumeLink)'
+        fields: 'items(id,volumeInfo/title,volumeInfo/authors,volumeInfo/description,volumeInfo/imageLinks/thumbnail,volumeInfo/canonicalVolumeLink)',
+        filter: 'ebooks'
     }
     let qString = q || '*';
     if (intitle) qString += `+intitle:${intitle}`;
@@ -53,18 +55,28 @@ async function searchAPI(q, offset = 0, intitle, inauthor, isbn) {
     console.log(params.q);
     const { data } = await axios.get(BASE_URL, { params });
     //extract an array of just the book info we want from data
-    const books = data.items.map(item => {
-        const book = {
-            id : item.id,
-            title : item.volumeInfo.title,
-            authors : item.volumeInfo.authors,
-            cover : item.volumeInfo.imageLinks.thumbnail,
-            description : item.volumeInfo.description,
-            link : item.volumeInfo.canonicalVolumeLink
-        }
-        return book;
-    });
-    return books;
+    try {
+        const books = data.items.map(item => {
+            //if there is no thumbnail, just use an empty string
+            const thumbnail = item.volumeInfo.imageLinks
+                ? item.volumeInfo.imageLinks.thumbnail
+                : ''
+            const book = {
+                id: item.id,
+                title: item.volumeInfo.title,
+                authors: item.volumeInfo.authors,
+                cover: thumbnail,
+                description: item.volumeInfo.description,
+                link: item.volumeInfo.canonicalVolumeLink
+            }
+            return book;
+        });
+        return books;
+    } catch (e) {
+        //this will only fail on a failure to get anything at all back
+        throw new BadRequestError("No Results")
+    }
+
 }
 
 module.exports = {

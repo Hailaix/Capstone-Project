@@ -16,20 +16,24 @@ const SearchPage = ({ lists }) => {
             <div className="row bg-light">
                 <SearchForm submit={submitSearch} />
             </div>
-            {books && <div className="row">
-                <table className="table table-hover">
-                    <tbody>
-                        {books.map((book, i) => (
-                            <tr key={i} id={book.id}>
-                                <Book book={book} />
-                                <td>
-                                    <ListDropdown book_id={book.id} lists={lists} />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>}
+            {books &&
+                <div className="row">
+                    <div className="col">
+                        <table className="table table-hover">
+                            <tbody>
+                                {books.map((book, i) => (
+                                    <tr key={i} id={book.id}>
+                                        <Book book={book} />
+                                        <td>
+                                            <ListDropdown book_id={book.id} lists={lists} />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
         </div>
     )
 }

@@ -35,8 +35,7 @@ const SearchForm = ({ submit }) => {
             if (!searching) setSearching(true);
             setDisabled(false);
         } catch (e) {
-            // console.log(e);
-            setErrors(['No results']);
+            setErrors(e);
             setFormData(INIT_STATE);
             setDisabled(false);
         }
@@ -98,7 +97,7 @@ const SearchForm = ({ submit }) => {
                 </div>
                 <div className="mt-3">
                     {errors && errors.map((e, i) => (
-                        <small key={i} className="text-danger">{e}</small>
+                        <div><small key={i} className="text-danger">{e}</small></div>
                     ))}
                     {page > 0 &&
                         <button
