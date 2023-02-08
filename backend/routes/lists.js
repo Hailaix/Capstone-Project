@@ -31,6 +31,16 @@ router.get('/:id', ensureLoggedIn, async function (req, res, next) {
     }
 });
 
+/** GET /user/:username Returns a list of {id, title} of all reading lists created by the specified user */
+router.get('/user/:username', ensureLoggedIn, async function (req, res, next) {
+    try {
+        const lists = await List.getByUser(req.params.username);
+        return res.json({ lists });
+    } catch (e) {
+        return next(e);
+    }
+})
+
 /** POST / add a new reading list to the database*/
 router.post('/', ensureLoggedIn, async function (req, res, next) {
     try {
@@ -76,7 +86,7 @@ router.put('/:id', ensureLoggedIn, async function (req, res, next) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
-        const {title, description} = req.body;
+        const { title, description } = req.body;
         const list = await List.updateList(req.params.id, title, description);
         return res.json({ list });
     } catch (e) {

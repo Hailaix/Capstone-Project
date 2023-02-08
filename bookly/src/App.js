@@ -23,6 +23,8 @@ function App() {
 
   //the currently logged in username
   const [user, setUser] = useState(null);
+  //the logged in user's reading lists
+  const [lists, setLists] = useState([]);
 
   //set up jwt in localStorage under key 'token'
   const [token, setToken] = useLocalStorage('token');
@@ -32,12 +34,14 @@ function App() {
 
   //whenever token is changed, grab the username from the token
   useEffect(() => {
-    const getUser = () => {
+    const getUser = async () => {
       //if there is no token, do nothing
       if (token) {
         //if there is a token, extract the username from it and set it in state
         const { username } = jwt_decode(token);
         setUser(username);
+        //then get the lists associated with that user
+        setLists(await BooklyAPI.getUserLists(username));
       }
     }
     getUser();
@@ -72,7 +76,7 @@ function App() {
         <Route path='users/:username' element={user ? <Profile user={user} /> : <Navigate to='/login' />} />
         <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/login' />} />
         <Route path='lists/:list_id' element={user ? <List user={user} /> : <Navigate to='/login' />} />
-        <Route path='search' element={user ? <SearchPage /> : <Navigate to='/login' />} />
+        <Route path='search' element={user ? <SearchPage lists={lists} /> : <Navigate to='/login' />} />
       </Routes>
     </div>
   );

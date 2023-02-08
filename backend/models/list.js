@@ -26,6 +26,16 @@ class List {
         return res.rows;
     }
 
+    /** Retrieve the id and title of all lists in db created by username */
+    static async getByUser(username) {
+        const res = await db.query(`
+        SELECT id, title
+        FROM reading_lists
+        WHERE username = $1`,
+            [username])
+        return res.rows;
+    }
+
     /** Retrieve a list by its list_id
      *  Returns { id, username, title, description, books }
      *  Where books is { { book_id, title }, ... }

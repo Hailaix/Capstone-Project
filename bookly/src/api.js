@@ -69,6 +69,12 @@ class BooklyAPI {
         return res.lists;
     }
 
+    /**GET all lists created by username */
+    static async getUserLists(username) {
+        const res = await this.request(`lists/user/${username}`);
+        return res.lists;
+    }
+
     /**GET a specifed list */
     static async getList(list_id) {
         const res = await this.request(`lists/${list_id}`);

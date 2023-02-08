@@ -27,12 +27,16 @@ const SearchForm = ({ submit }) => {
 
     const search = async offset => {
         try {
+            //disable buttons
             setDisabled(true);
+            //reset errors
+            setErrors([]);
             await submit({ ...formData, offset });
             if (!searching) setSearching(true);
             setDisabled(false);
         } catch (e) {
-            setErrors(e);
+            // console.log(e);
+            setErrors(['No results']);
             setFormData(INIT_STATE);
             setDisabled(false);
         }
