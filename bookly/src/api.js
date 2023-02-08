@@ -107,7 +107,7 @@ class BooklyAPI {
      * returns a list of books
      */
     static async search(data) {
-        const res = this.request(`search`, data);
+        const res = await this.request(`search`, data);
         return res.books;
     }
 }

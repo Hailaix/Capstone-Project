@@ -33,9 +33,10 @@ async function addBookFromAPI(id) {
 const constructParams = (q, intitle, inauthor, isbn, offset) => {
     const params = {
         projection: "lite",
-        startIndex: offset
+        startIndex: offset,
+        fields: 'items(id,volumeInfo/title,volumeInfo/authors,volumeInfo/description,volumeInfo/imageLinks/thumbnail,volumeInfo/canonicalVolumeLink)'
     }
-    let qString = q;
+    let qString = q || '*';
     if (intitle) qString += `+intitle:${intitle}`;
     if (inauthor) qString += `+inauthor:${inauthor}`;
     if (isbn) qString += `+isbn:${isbn}`;
@@ -49,6 +50,7 @@ const constructParams = (q, intitle, inauthor, isbn, offset) => {
 async function searchAPI(q, offset = 0, intitle, inauthor, isbn) {
     //format the query parameters how the API wants them, then send the request
     const params = constructParams(q, intitle, inauthor, isbn, offset);
+    console.log(params.q);
     const { data } = await axios.get(BASE_URL, { params });
     //extract an array of just the book info we want from data
     const books = data.items.map(item => {

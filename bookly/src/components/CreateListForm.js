@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-const ProfileEditForm = ({ email, bio, save, cancel }) => {
+const CreateListForm = ({ save, cancel }) => {
     const INIT_STATE = {
-        email,
-        bio,
+        title: '',
+        description: ''
     }
     const [formData, setFormData] = useState(INIT_STATE);
     const [errors, setErrors] = useState([]);
@@ -32,22 +32,21 @@ const ProfileEditForm = ({ email, bio, save, cancel }) => {
         <form onSubmit={handleSubmit}>
             <fieldset className="container">
                 <div className="row">
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="title">Title:</label>
                     <input
                         className="form-control"
-                        name="email"
-                        type="email"
-                        value={formData.email}
+                        name="title"
+                        value={formData.title}
                         onChange={handleChange}
                     />
                 </div>
                 <div className="row">
-                    <label htmlFor="bio">Bio:</label>
+                    <label htmlFor="description">Description:</label>
                     <textarea
                         className="form-control"
                         rows='3'
-                        name="bio"
-                        value={formData.bio}
+                        name="description"
+                        value={formData.description}
                         onChange={handleChange}
                     />
                 </div>
@@ -63,4 +62,4 @@ const ProfileEditForm = ({ email, bio, save, cancel }) => {
     )
 }
 
-export default ProfileEditForm;
+export default CreateListForm;

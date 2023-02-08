@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BooklyAPI from "../api";
+import CreateListForm from "./CreateListForm";
 import Lists from "./Lists";
 import ProfileEditForm from "./ProfileEditForm";
 
@@ -38,8 +39,15 @@ const Profile = ({ user }) => {
     //submit edit of profile to db and change profile in component
     const submitEdit = async formData => {
         await BooklyAPI.editUser(profile.username, formData);
-        setProfile({...profile, email: formData.email, bio: formData.bio});
+        setProfile({ ...profile, email: formData.email, bio: formData.bio });
         toggleEdit();
+    }
+
+    //submit the creation of a new reading list and update profile
+    const submitCreate = async formData => {
+        const list = await BooklyAPI.createList(formData);
+        setProfile({ ...profile, lists: [...profile.lists, list] });
+        toggleCreating();
     }
 
     //loading page until profile has been retrieved
@@ -68,6 +76,7 @@ const Profile = ({ user }) => {
                     {user === profile.username &&
                         <button className="btn btn-success" onClick={toggleCreating}>Create a New Reading List</button>
                     }
+                    {creating && <CreateListForm save={submitCreate} cancel={toggleCreating} />}
                 </div>
 
             </div>

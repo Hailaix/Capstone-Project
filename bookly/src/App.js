@@ -72,7 +72,7 @@ function App() {
         <Route path='users/:username' element={user ? <Profile user={user} /> : <Navigate to='/login' />} />
         <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/login' />} />
         <Route path='lists/:list_id' element={user ? <List user={user} /> : <Navigate to='/login' />} />
-        <Route path='search' element={user ? <SearchPage /> : <Navigate to='login' />} />
+        <Route path='search' element={user ? <SearchPage /> : <Navigate to='/login' />} />
       </Routes>
     </div>
   );

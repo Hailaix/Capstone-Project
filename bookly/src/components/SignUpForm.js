@@ -20,14 +20,13 @@ const SignUpForm = ({ submit }) => {
         }));
     };
 
-    //sends data to login function
+    //sends data to sign up function
     const handleSubmit = async e => {
         e.preventDefault();
         try {
             await submit(formData);
             navigate('/');
         } catch (e) {
-            //error would be failed log in
             setErrors(e);
             setFormData(INIT_STATE);
         }
