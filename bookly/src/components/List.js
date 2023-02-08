@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import BooklyAPI from "../api";
 import Book from "./Book";
 import ListEditForm from "./ListEditForm";
+import Review from "./Review";
 import ReviewForm from "./ReviewForm";
 
 const List = ({ user }) => {
@@ -91,6 +92,11 @@ const List = ({ user }) => {
             toggleReview();
         }
     }
+    //deletes the current user's review from the db and removes it from list
+    const removeReview = async () => {
+        await BooklyAPI.removeReview(list_id, user);
+        setList({ ...list, reviews: list.reviews.filter(r => (r.username !== user)) });
+    }
 
     return (
         <div className="container-fluid align-items-center" id={list.id}>
@@ -139,11 +145,23 @@ const List = ({ user }) => {
                                         }
                                     </button>
                                 }
+                                {userReview &&
+                                    <button className="btn btn-link" onClick={removeReview}>Delete your Review</button>
+                                }
                             </div>
                         }
                         {list.reviews.length === 0
                             ? <p><i>No Reviews yet...</i></p>
-                            : <p>Review</p>
+                            : <table className="table">
+                                <tbody>
+                                    {list.reviews.map((review, i) => (
+                                        <tr key={i}>
+                                            <Review review={review} />
+                                        </tr>
+                                    ))}
+                                </tbody>
+
+                            </table>
                         }
                     </div>
                 </div>

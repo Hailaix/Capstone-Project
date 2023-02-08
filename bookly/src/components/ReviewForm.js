@@ -36,14 +36,18 @@ const ReviewForm = ({ review = {}, save, cancel }) => {
             <fieldset className="container">
                 <div className="row m-2">
                     <div className="col">
+                        <label htmlFor="rating">Rating:</label>
+                    </div>
+                    <div className="col">
                         <input
-                            className="form-control"
+                            className="form-control form-control-sm text-end"
                             type="number"
                             name="rating"
                             min={0}
                             max={10}
                             value={formData.rating}
                             onChange={handleChange}
+                            placeholder="rating"
                         />
                     </div>
                 </div>
@@ -60,19 +64,20 @@ const ReviewForm = ({ review = {}, save, cancel }) => {
                 </div>
                 <div className="row m-2">
                     <div className="col">
-                        <input
+                        <textarea
                             className="form-control"
                             name="body"
                             value={formData.body}
                             onChange={handleChange}
                             placeholder="Share your thoughts..."
+                            rows={3}
                         />
                     </div>
                 </div>
                 <div className="row mb-2 mx-2">
                     <div className="col text-end">
-                        <button className="btn btn-success">Submit</button>
-                        <button className="btn btn-secondary" onClick={cancel}>Cancel</button>
+                        <button className="btn btn-sm btn-success">Submit</button>
+                        <button className="btn btn-sm btn-secondary" onClick={cancel}>Cancel</button>
                     </div>
                 </div>
                 <div>
