@@ -65,7 +65,7 @@ function App() {
     setToken(newToken);
   }
 
-  /** some routes will navigate to the login page unless there is a user logged in */
+  /** some routes will navigate to the Home page unless there is a user logged in */
   return (
     <div className="App">
       <NavBar user={user} logout={logout} />
@@ -73,10 +73,10 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='login' element={<LoginForm submit={login} />} />
         <Route path='signup' element={<SignUpForm submit={signup} />} />
-        <Route path='users/:username' element={user ? <Profile user={user} /> : <Navigate to='/login' />} />
-        <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/login' />} />
-        <Route path='lists/:list_id' element={user ? <List user={user} /> : <Navigate to='/login' />} />
-        <Route path='search' element={user ? <SearchPage lists={lists} /> : <Navigate to='/login' />} />
+        <Route path='users/:username' element={user ? <Profile user={user} /> : <Navigate to='/' />} />
+        <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/' />} />
+        <Route path='lists/:list_id' element={user ? <List user={user} /> : <Navigate to='/' />} />
+        <Route path='search' element={user ? <SearchPage lists={lists} /> : <Navigate to='/' />} />
       </Routes>
     </div>
   );
