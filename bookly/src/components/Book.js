@@ -12,7 +12,7 @@ const Book = ({ book }) => {
     }
     return (
         <>
-            <td>
+            <td className="align-middle">
                 <a href={book.link} target='_blank' rel="noreferrer">
                     <img src={book.cover} alt='cover' />
                 </a>

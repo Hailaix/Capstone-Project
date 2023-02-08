@@ -5,7 +5,7 @@ import CreateListForm from "./CreateListForm";
 import Lists from "./Lists";
 import ProfileEditForm from "./ProfileEditForm";
 
-const Profile = ({ user }) => {
+const Profile = ({ user, logout }) => {
     const { username } = useParams();
     const navigate = useNavigate();
     const [profile, setProfile] = useState();
@@ -13,6 +13,8 @@ const Profile = ({ user }) => {
     const [editing, setEditing] = useState(false);
     //state for adding a new list
     const [creating, setCreating] = useState(false);
+    //state for deletion confirmation
+    const [delConfirm, setDelConfirm] = useState(false);
 
     //find the user in the db
     useEffect(() => {
@@ -50,6 +52,17 @@ const Profile = ({ user }) => {
         toggleCreating();
     }
 
+    //simple toggle to switch between delete confirmation buttons
+    const toggleDel = () => {
+        setDelConfirm(!delConfirm);
+    }
+    //deletes the user profile, logs out and returns to the homepage
+    const deleteProfile = async () => {
+        await BooklyAPI.removeUser(profile.username);
+        logout();
+        navigate('/');
+    }
+
     //loading page until profile has been retrieved
     if (!profile) return (<h1>Loading...</h1>);
     return (
@@ -63,9 +76,19 @@ const Profile = ({ user }) => {
                             <h5>{profile.email}</h5>
                             <p>{profile.bio}</p>
                             {user === profile.username &&
-                                <div>
-                                    <button className="btn btn-secondary" onClick={toggleEdit}>Edit Profile</button>
-                                    <button className="btn btn-danger">Delete Profile</button>
+                                <div className="row">
+                                    {delConfirm
+                                        ? <div className="col">
+                                            <p className="text-danger">Are you sure?</p>
+                                            <button className="btn btn-sm btn-danger" onClick={deleteProfile}>Yes</button>
+                                            <button className="btn btn-sm btn-secondary" onClick={toggleDel}>No</button>
+                                        </div>
+                                        : <div className="col">
+                                            <button className="btn btn-secondary" onClick={toggleEdit}>Edit Profile</button>
+                                            <button className="btn btn-danger" onClick={toggleDel}>Delete Profile</button>
+                                        </div>
+                                    }
+
                                 </div>
                             }
                         </>}
@@ -80,7 +103,7 @@ const Profile = ({ user }) => {
                 </div>
 
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -43,7 +43,7 @@ router.post('/register', async function (req, res, next) {
             throw new BadRequestError(errors);
         }
         //create a new user in the db with the data, return a JWT of the new user
-        const newUser = User.register(req.body);
+        const newUser = await User.register(req.body);
         const token = createToken(newUser);
         return res.status(201).json({ token });
     } catch (e) {

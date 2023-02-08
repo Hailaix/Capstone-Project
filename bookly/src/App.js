@@ -73,7 +73,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='login' element={<LoginForm submit={login} />} />
         <Route path='signup' element={<SignUpForm submit={signup} />} />
-        <Route path='users/:username' element={user ? <Profile user={user} /> : <Navigate to='/' />} />
+        <Route path='users/:username' element={user ? <Profile user={user} logout={logout} /> : <Navigate to='/' />} />
         <Route path='lists' element={user ? <ReadingLists /> : <Navigate to='/' />} />
         <Route path='lists/:list_id' element={user ? <List user={user} /> : <Navigate to='/' />} />
         <Route path='search' element={user ? <SearchPage lists={lists} /> : <Navigate to='/' />} />
