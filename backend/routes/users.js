@@ -74,19 +74,6 @@ router.post('/login', async function (req, res, next) {
     }
 });
 
-// /** Get /users : => { users: [ { user }, ...]} 
-//  *  Returns a list of every user
-//  *  ***********************************************may not have a use, flagged for removal
-// */
-// router.get('/', ensureLoggedIn, async function (req, res, next) {
-//     try {
-//         const users = await User.listAll();
-//         return res.json({ users });
-//     } catch (e) {
-//         return next(e);
-//     }
-// });
-
 /** Get /:username : => { user }
  *  Returns { username, email, bio, lists}
  *  Where lists is [ { list name, list_id }, ... ]

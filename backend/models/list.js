@@ -140,6 +140,7 @@ class List {
     /**TODO */
     /** Edit a list's title and description */
     static async updateList(list_id, title, description) {
+        if(!title) throw new BadRequestError('Title is necessary');
         const res = await db.query(`
         UPDATE reading_lists
         SET title = $2, description = $3

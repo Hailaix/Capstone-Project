@@ -41,7 +41,7 @@ class User {
 
     /** register user with provided data
      * 
-     * Returns { username, bio }
+     * Returns { username, email, bio }
      * 
      * Throws BadRequestError on duplicate username
      */
@@ -69,23 +69,12 @@ class User {
         return res.rows[0];
     }
 
-    /** get the list of all users
-     * 
-     * Returns [{ username, email, bio }, ...]
-     */
-    static async listAll() {
-        const res = await db.query(`
-            SELECT username, email, bio
-            FROM users
-            ORDER BY username`
-        );
-        return res.rows;
-    }
-
     /** Given a username, retrieve the user's data and lists associated with them
      * 
      * Returns { username, bio, lists }
-     *  where lists is [{ list_id, title }]
+     * where lists is [{ list_id, title }]
+     * 
+     * Throws NotFoundError on bad username
      */
     static async get(username) {
         //first we retrieve the user from the db

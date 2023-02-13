@@ -15,11 +15,14 @@ class Review {
 
     /** Adds a review of the specified list by the specified user to the db
      *  a user can only have a single review of a list
-     *  Throws NotFoundError on missing list or user, BadRequestError on duplicate review
+     *  Throws NotFoundError on missing list or user, BadRequestError on duplicate review or reviews without a rating
      *  {list_id, username, review} => {list_id, username, rating, title, body}
      *  where review is { rating, title, body}
      */
     static async addReview(list_id, username, { rating, title, body }) {
+
+        //if the review does not have a rating, the request is bad
+        if (!Number.isInteger(rating)) throw new BadRequestError('rating is a required field');
 
         //first, check if the reading list exists
         const listcheck = await db.query(`
@@ -87,9 +90,9 @@ class Review {
         SET ${cols}
         WHERE list_id = $${values.length + 1} AND username = $${values.length + 2}
         RETURNING list_id, username, rating, title, body`,
-        [...values, list_id, username]);
-        
-        if(!res.rows[0]) throw new NotFoundError(`${username} has not reviewed list ${list_id}`);
+            [...values, list_id, username]);
+
+        if (!res.rows[0]) throw new NotFoundError(`${username} has not reviewed list ${list_id}`);
         return res.rows[0];
     }
 }
