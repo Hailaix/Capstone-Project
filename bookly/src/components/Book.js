@@ -19,7 +19,7 @@ const Book = ({ book }) => {
             </td>
             <td>
                 <h4>{book.title}</h4>
-                <h5>authors: {book.authors}</h5>
+                <h5>{'Author[s]'}: {book.authors}</h5>
                 <div id="description">
                     {readDiscription()}
                 </div>

@@ -29,7 +29,7 @@ const ListEditForm = ({ title, description, save, cancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="mb-3">
             <fieldset className="container">
                 <div className="row">
                     <label htmlFor="title">Title:</label>
@@ -54,8 +54,8 @@ const ListEditForm = ({ title, description, save, cancel }) => {
                     {errors && errors.map((e, i) => (
                         <small key={i} className="text-danger">{e}</small>
                     ))}
-                    <button className="btn btn-primary">Save</button>
-                    <button className="btn btn-secondary mx-3" onClick={cancel}>Cancel</button>
+                    <button className="btn btn-sm btn-primary">Save</button>
+                    <button className="btn btn-sm btn-secondary mx-3" onClick={cancel}>Cancel</button>
                 </div>
             </fieldset>
         </form>

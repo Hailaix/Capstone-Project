@@ -80,11 +80,11 @@ const Profile = ({ user, logout }) => {
                                     {delConfirm
                                         ? <div className="col">
                                             <p className="text-danger">Are you sure?</p>
-                                            <button className="btn btn-sm btn-danger" onClick={deleteProfile}>Yes</button>
+                                            <button className="btn btn-sm btn-danger mx-2" onClick={deleteProfile}>Yes</button>
                                             <button className="btn btn-sm btn-secondary" onClick={toggleDel}>No</button>
                                         </div>
                                         : <div className="col">
-                                            <button className="btn btn-secondary" onClick={toggleEdit}>Edit Profile</button>
+                                            <button className="btn btn-secondary mx-2" onClick={toggleEdit}>Edit Profile</button>
                                             <button className="btn btn-danger" onClick={toggleDel}>Delete Profile</button>
                                         </div>
                                     }

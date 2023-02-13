@@ -125,8 +125,8 @@ const List = ({ user }) => {
                                         <button className="btn btn-sm btn-secondary" onClick={toggleDel}>No</button>
                                     </div>
                                     : <div>
-                                        <button className="btn btn-secondary" onClick={toggleEdit}>Edit list</button>
-                                        <button className="btn btn-danger" onClick={toggleDel}>Delete list</button>
+                                        <button className="btn btn-sm btn-secondary" onClick={toggleEdit}>Edit list</button>
+                                        <button className="btn btn-sm btn-danger mx-2" onClick={toggleDel}>Delete list</button>
                                     </div>
                                 }
                             </div>
