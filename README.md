@@ -11,6 +11,10 @@ Uses the [google books API](https://developers.google.com/books) to grab informa
 
 In order to start up the site from this repository, first, create the postgres databases using the files in backend/Database. After database creation, the backend can be run with the command `node server.js` or `nodemon server.js`, which will open up the express server at [http://localhost:5000](http://localhost:5000). The frontend can be started with `npm start` in the bookly directory, which will open the app at [http://localhost:3000](http://localhost:3000).
 
+## Testing
+
+To run tests on the backend, run `jest --runInBand` while in the backend directory. To run tests on the react app, run `npm test` while in the bookly directory.
+
 ## Features
 
 1. users can create reading lists, everything on the site revolves around reading lists in some way.

@@ -119,7 +119,7 @@ class BooklyAPI {
     }
 
     /**Review Routes */
-    
+
     /**POST creates a new review of a list by user 
      * data: {rating, title, body}, title and body optional
      * returns the review
@@ -137,7 +137,7 @@ class BooklyAPI {
      */
     static async editReview(list_id, username, data) {
         //ensure that rating is an integer
-        if(data.rating) data.rating = +data.rating
+        if (data.rating) data.rating = +data.rating
         const res = await this.request(`reviews/${list_id}/${username}`, data, 'patch');
         return res.review;
     }

@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { MemoryRouter } from 'react-router-dom'
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('Smoke for welcome', () => {
+  render(<MemoryRouter>
+    <App />
+  </MemoryRouter>);
+  const welcome = screen.getByText("Welcome to Bookly!");
+  expect(welcome).toBeInTheDocument();
 });
