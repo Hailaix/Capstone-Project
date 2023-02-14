@@ -1,9 +1,5 @@
 const request = require('supertest');
-
-const db = require('../db');
 const app = require('../app');
-
-const User = require('../models/user');
 
 const {
     commonBeforeAll,
@@ -12,8 +8,7 @@ const {
     commonAfterAll,
     readinglistIDs,
     u1Token,
-    u2Token,
-    u3Token
+    u2Token
 } = require('./_testcommon');
 
 beforeAll(commonBeforeAll);

@@ -66,7 +66,7 @@ router.delete('/:id', ensureLoggedIn, async function (req, res, next) {
         const complist = await List.get(req.params.id);
         if (complist.username !== res.locals.user.username) throw new UnauthorizedError();
         await List.remove(req.params.id);
-        return res.json({ deleted: req.params.id });
+        return res.json({ deleted: +req.params.id });
     } catch (e) {
         return next(e);
     }
@@ -104,7 +104,7 @@ router.post('/:id/books/:book_id', ensureLoggedIn, async function (req, res, nex
         if (complist.username !== res.locals.user.username) throw new UnauthorizedError();
 
         const addedBook = await List.addBook(req.params.id, req.params.book_id);
-        return res.json({ addedBook });
+        return res.status(201).json({ addedBook });
     } catch (e) {
         return next(e);
     }
